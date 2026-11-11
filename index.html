@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f8f4">
+  <meta name="description" content="Portfolio của Vũ Thị Ngọc Ánh — sinh viên Thương mại điện tử UEH, định hướng vận hành sàn và tối ưu trải nghiệm mua sắm trực tuyến.">
+  <title>Vũ Thị Ngọc Ánh — E-commerce Operations</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #26332e;
+      --muted: #68766f;
+      --sage: #718c78;
+      --sage-dark: #4f6b58;
+      --cream: #f7f8f4;
+      --line: #e4e9e1;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--cream);
+      font-family: "DM Sans", sans-serif;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, .serif { font-family: "Playfair Display", Georgia, serif; }
+    a { color: inherit; }
+    #bubble-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .52;
+    }
+    .site-layer { position: relative; z-index: 1; }
+    .glass-nav {
+      background: rgba(247, 248, 244, .86);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(228, 233, 225, .8);
+    }
+    .eyebrow {
+      color: var(--sage-dark);
+      font-size: .73rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .section-heading { letter-spacing: -.035em; }
+    .soft-card {
+      background: rgba(255, 255, 255, .82);
+      border: 1px solid rgba(228, 233, 225, .9);
+      box-shadow: 0 18px 55px rgba(48, 65, 53, .055);
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #dce5da;
+      border-radius: 9999px;
+      background: #f6f8f4;
+      color: #536a59;
+      padding: .55rem .85rem;
+      font-size: .83rem;
+      font-weight: 500;
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    .timeline-line::before {
+      content: "";
+      position: absolute;
+      left: .43rem;
+      top: .55rem;
+      bottom: 1.4rem;
+      width: 1px;
+      background: #dce5da;
+    }
+    .nav-link { transition: color .2s ease; }
+    .nav-link:hover { color: var(--sage-dark); }
+    .music-button { box-shadow: 0 8px 26px rgba(41, 58, 46, .14); }
+    .music-button:focus-visible, a:focus-visible, button:focus-visible {
+      outline: 3px solid #9db59e;
+      outline-offset: 3px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+    }
+    @media print {
+      body { background: white; }
+      #bubble-canvas, header, .music-button, .screen-only { display: none !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
+      .site-layer { z-index: auto; }
+      main { padding-top: 0 !important; }
+      section { break-inside: avoid; padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
+      .soft-card { box-shadow: none; border-color: #d8ddd8; }
+      a { text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bubble-canvas" aria-hidden="true"></canvas>
+
+  <div class="site-layer">
+    <header class="glass-nav fixed inset-x-0 top-0 z-30">
+      <nav class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 lg:px-8" aria-label="Điều hướng chính">
+        <a href="#trang-chu" class="serif text-xl font-semibold tracking-tight">Ánh<span class="text-[#718c78]">.</span></a>
+        <button id="menu-toggle" class="rounded-lg p-2 text-[#26332e] md:hidden" aria-label="Mở menu" aria-expanded="false" aria-controls="main-menu">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <div id="main-menu" class="hidden absolute left-0 right-0 top-full flex-col gap-5 border-b border-[#e4e9e1] bg-[#f7f8f4] px-5 py-5 text-sm md:static md:flex md:flex-row md:items-center md:gap-8 md:border-0 md:bg-transparent md:p-0">
+          <a class="nav-link" href="#ve-toi">Về tôi</a>
+          <a class="nav-link" href="#du-an">Dự án</a>
+          <a class="nav-link" href="#kinh-nghiem">Kinh nghiệm</a>
+          <a class="nav-link" href="#lien-he">Liên hệ</a>
+          <button class="screen-only rounded-full border border-[#cbd8ca] px-4 py-2 font-semibold text-[#4f6b58] transition hover:bg-[#eaf0e8]" onclick="window.print()">Tải CV PDF</button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="pt-20">
+      <section id="trang-chu" class="mx-auto grid min-h-[calc(100vh-5rem)] max-w-6xl items-center gap-12 px-5 py-20 md:grid-cols-[1.25fr_.75fr] lg:px-8 lg:py-24">
+        <div class="reveal">
+          <div class="mb-7 inline-flex items-center gap-2 rounded-full border border-[#dce5da] bg-white/70 px-4 py-2 text-sm text-[#536a59]">
+            <span class="h-2 w-2 rounded-full bg-[#86a18b]"></span>
+            Sinh viên năm 3 ngành Thương mại điện tử · UEH
+          </div>
+          <p class="eyebrow mb-4">Xin chào, mình là</p>
+          <h1 class="section-heading max-w-3xl text-5xl font-semibold leading-[1.12] sm:text-6xl lg:text-7xl">
+            Vũ Thị<br class="hidden sm:block"> Ngọc Ánh<span class="text-[#718c78]">.</span>
+          </h1>
+          <p class="mt-6 max-w-2xl text-lg font-medium leading-8 text-[#4d5e54] sm:text-xl">
+            E-commerce Operations Specialist
+          </p>
+          <p class="mt-2 max-w-2xl text-base leading-7 text-[#68766f] sm:text-lg">
+            Tối ưu quy trình, kiến tạo trải nghiệm mua sắm trực tuyến.
+          </p>
+          <p class="mt-5 max-w-xl leading-7 text-[#68766f]">
+            Mình yêu thích cách những chi tiết vận hành chỉn chu tạo nên trải nghiệm mua sắm đáng tin cậy. Mình đang tìm cơ hội thực tập để học hỏi và đóng góp cho hoạt động kinh doanh trên các sàn thương mại điện tử.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="#du-an" class="inline-flex items-center gap-2 rounded-full bg-[#526d5b] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#405a49]">
+              Khám phá dự án <span aria-hidden="true">↗</span>
+            </a>
+            <a href="#lien-he" class="inline-flex items-center rounded-full border border-[#cbd8ca] bg-white/70 px-6 py-3 text-sm font-semibold text-[#4f6b58] transition hover:bg-[#edf2eb]">
+              Liên hệ với mình
+            </a>
+          </div>
+          <div class="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-sm text-[#718078]">
+            <span class="inline-flex items-center gap-2"><span class="text-[#718c78]">⌖</span> TP. Hồ Chí Minh</span>
+            <span class="inline-flex items-center gap-2"><span class="text-[#718c78]">✳</span> Sẵn sàng học hỏi và bắt đầu</span>
+          </div>
+        </div>
+
+        <div class="reveal relative mx-auto w-full max-w-sm">
+          <div class="absolute -left-7 top-10 h-24 w-24 rounded-full bg-[#e6ede4] blur-2xl"></div>
+          <div class="absolute -bottom-5 -right-4 h-32 w-32 rounded-full bg-[#efe8dc] blur-2xl"></div>
+          <div class="soft-card relative rounded-[2rem] p-7 sm:p-9">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="eyebrow">Điểm mạnh của mình</p>
+                <h2 class="serif mt-3 text-2xl font-semibold">Chỉn chu từ<br>những điều nhỏ</h2>
+              </div>
+              <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#edf2eb] text-2xl text-[#617b67]" aria-hidden="true">✦</div>
+            </div>
+            <div class="mt-8 space-y-5">
+              <div class="flex gap-4">
+                <span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#edf2eb] text-xs text-[#526d5b]">01</span>
+                <div><h3 class="font-semibold">Tỉ mỉ, có trách nhiệm</h3><p class="mt-1 text-sm leading-6 text-[#718078]">Cẩn thận trong từng bước xử lý đơn hàng.</p></div>
+              </div>
+              <div class="flex gap-4">
+                <span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#edf2eb] text-xs text-[#526d5b]">02</span>
+                <div><h3 class="font-semibold">Lấy khách hàng làm trọng tâm</h3><p class="mt-1 text-sm leading-6 text-[#718078]">Luôn hướng đến trải nghiệm mua sắm thuận tiện.</p></div>
+              </div>
+              <div class="flex gap-4">
+                <span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#edf2eb] text-xs text-[#526d5b]">03</span>
+                <div><h3 class="font-semibold">Sẵn sàng cải thiện</h3><p class="mt-1 text-sm leading-6 text-[#718078]">Chủ động học hỏi và phối hợp cùng đội nhóm.</p></div>
+              </div>
+            </div>
+            <div class="mt-8 border-t border-[#e8ece6] pt-5 text-xs tracking-wide text-[#849087]">E-COMMERCE · OPERATIONS · CUSTOMER EXPERIENCE</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="ve-toi" class="mx-auto max-w-6xl px-5 py-20 lg:px-8">
+        <div class="reveal grid gap-12 md:grid-cols-[.8fr_1.2fr]">
+          <div>
+            <p class="eyebrow">Một chút về mình</p>
+            <h2 class="section-heading serif mt-3 text-4xl font-semibold sm:text-5xl">Nền tảng vững,<br>tư duy cầu tiến.</h2>
+            <p class="mt-5 max-w-md leading-7 text-[#68766f]">Từ kiến thức thương mại điện tử đến trải nghiệm làm việc thực tế, mình luôn tìm cách làm công việc gọn gàng hơn và phục vụ khách hàng tốt hơn.</p>
+          </div>
+          <div class="grid gap-5">
+            <article class="soft-card rounded-2xl p-6 sm:p-7">
+              <div class="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <p class="eyebrow">Học vấn · 2024 — 2028</p>
+                  <h3 class="serif mt-2 text-2xl font-semibold">Đại học Kinh tế TP. Hồ Chí Minh</h3>
+                  <p class="mt-1 text-[#68766f]">Ngành Thương mại điện tử · UEH</p>
+                </div>
+                <span class="rounded-full bg-[#edf2eb] px-3 py-1.5 text-sm font-semibold text-[#526d5b]">GPA: Khá</span>
+              </div>
+            </article>
+            <div class="grid gap-5 sm:grid-cols-2">
+              <article class="soft-card rounded-2xl p-6">
+                <p class="eyebrow">Mục tiêu ngắn hạn</p>
+                <h3 class="serif mt-2 text-xl font-semibold">Vững nghiệp vụ vận hành</h3>
+                <p class="mt-3 text-sm leading-6 text-[#68766f]">Thực hành quản lý gian hàng Shopee, TikTok Shop; theo dõi đơn hàng, tồn kho và phối hợp xử lý các tình huống phát sinh.</p>
+              </article>
+              <article class="soft-card rounded-2xl p-6">
+                <p class="eyebrow">Định hướng dài hạn</p>
+                <h3 class="serif mt-2 text-xl font-semibold">Phát triển cùng dữ liệu</h3>
+                <p class="mt-3 text-sm leading-6 text-[#68766f]">Trở thành chuyên viên E-commerce Operations, sử dụng dữ liệu để cải thiện hiệu quả vận hành và trải nghiệm khách hàng.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="du-an" class="mx-auto max-w-6xl px-5 py-20 lg:px-8">
+        <div class="reveal mb-9 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p class="eyebrow">Dự án tiêu biểu</p>
+            <h2 class="section-heading serif mt-3 text-4xl font-semibold sm:text-5xl">Ý tưởng thành trải nghiệm.</h2>
+          </div>
+          <span class="text-sm text-[#849087]">Dự án cá nhân · Website thương mại điện tử</span>
+        </div>
+        <article class="soft-card reveal grid overflow-hidden rounded-[1.75rem] md:grid-cols-[.9fr_1.1fr]">
+          <div class="relative flex min-h-72 items-center justify-center overflow-hidden bg-[#e9eee7] p-8">
+            <div class="absolute left-8 top-8 h-20 w-20 rounded-full bg-white/50 blur-2xl"></div>
+            <div class="relative flex h-56 w-56 items-center justify-center rounded-full border border-white/70 bg-gradient-to-br from-[#faf8f1] via-[#f2eadc] to-[#d7dfd2] shadow-[inset_-18px_-18px_38px_rgba(87,107,88,.12),0_20px_40px_rgba(68,86,69,.12)]">
+              <div class="flex h-28 w-28 flex-col items-center justify-center rounded-full bg-[#f8f4e9] shadow-[0_8px_24px_rgba(67,69,53,.13)]">
+                <span class="serif text-xl font-semibold tracking-[.13em] text-[#53634f]">VELORA</span>
+                <span class="mt-1 text-[8px] uppercase tracking-[.2em] text-[#82907a]">hand-poured</span>
+              </div>
+              <span class="absolute -right-2 top-7 text-3xl text-white/80" aria-hidden="true">✦</span>
+              <span class="absolute -left-1 bottom-8 text-xl text-white/80" aria-hidden="true">✧</span>
+            </div>
+            <span class="absolute bottom-5 left-6 text-xs uppercase tracking-[.18em] text-[#758472]">A warm light, made by hand</span>
+          </div>
+          <div class="p-7 sm:p-10">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="rounded-full bg-[#edf2eb] px-3 py-1.5 text-xs font-semibold text-[#526d5b]">01 / PROJECT</span>
+              <span class="text-sm text-[#849087]">Thiết kế · Nội dung · Xây dựng website</span>
+            </div>
+            <h3 class="serif mt-5 text-3xl font-semibold sm:text-4xl">Velora — Nến thơm thủ công</h3>
+            <p class="mt-4 leading-7 text-[#68766f]">Tự xây dựng website giới thiệu và bán nến thơm thủ công, tạo nên một không gian mua sắm nhẹ nhàng, nhất quán với tinh thần thương hiệu.</p>
+            <ul class="mt-6 space-y-3 text-sm leading-6 text-[#536259]">
+              <li class="flex gap-3"><span class="text-[#718c78]">✦</span><span>Xây dựng website và trang danh sách sản phẩm.</span></li>
+              <li class="flex gap-3"><span class="text-[#718c78]">✦</span><span>Thiết kế banner, hình ảnh sản phẩm bằng Canva.</span></li>
+              <li class="flex gap-3"><span class="text-[#718c78]">✦</span><span>Viết nội dung giới thiệu sản phẩm, làm rõ đặc điểm và cảm hứng thương hiệu.</span></li>
+            </ul>
+            <a href="https://velora-candles.netlify.app/" target="_blank" rel="noopener noreferrer" class="mt-8 inline-flex items-center gap-2 font-semibold text-[#526d5b] underline decoration-[#b6c5b5] underline-offset-4 transition hover:text-[#344a3b]">
+              Ghé thăm website <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </article>
+      </section>
+
+      <section id="kinh-nghiem" class="mx-auto max-w-6xl px-5 py-20 lg:px-8">
+        <div class="reveal mb-10">
+          <p class="eyebrow">Trải nghiệm làm việc</p>
+          <h2 class="section-heading serif mt-3 text-4xl font-semibold sm:text-5xl">Hiểu quy trình từ thực tế.</h2>
+          <p class="mt-4 max-w-2xl leading-7 text-[#68766f]">Những công việc trực tiếp với đơn hàng và khách hàng giúp mình rèn sự chính xác, tinh thần trách nhiệm và khả năng phối hợp.</p>
+        </div>
+        <div class="timeline-line relative ml-1 space-y-7">
+          <article class="reveal relative pl-10">
+            <span class="absolute left-0 top-1 h-[15px] w-[15px] rounded-full border-[4px] border-[#f7f8f4] bg-[#718c78] ring-1 ring-[#9db09d]"></span>
+            <div class="soft-card rounded-2xl p-6 sm:p-7">
+              <div class="flex flex-wrap items-start justify-between gap-3">
+                <div><p class="eyebrow">03/2026 — 08/2026</p><h3 class="serif mt-2 text-2xl font-semibold">Nhân viên đóng gói hàng online</h3><p class="mt-1 font-medium text-[#526d5b]">CALIN YAYA</p></div>
+                <span class="rounded-full bg-[#f4f2eb] px-3 py-1.5 text-xs text-[#7c806e]">Vận hành đơn hàng</span>
+              </div>
+              <p class="mt-4 max-w-3xl leading-7 text-[#68766f]">Soạn hàng theo đơn; kiểm tra sản phẩm, lỗi và phụ kiện trước khi gửi; đóng gói và dán nhãn vận đơn cẩn thận để hỗ trợ đơn hàng được xử lý chính xác, sẵn sàng giao đến khách.</p>
+            </div>
+          </article>
+          <article class="reveal relative pl-10">
+            <span class="absolute left-0 top-1 h-[15px] w-[15px] rounded-full border-[4px] border-[#f7f8f4] bg-[#a2b39e] ring-1 ring-[#c6d1c3]"></span>
+            <div class="soft-card rounded-2xl p-6 sm:p-7">
+              <div class="flex flex-wrap items-start justify-between gap-3">
+                <div><p class="eyebrow">10/2025 — 01/2026</p><h3 class="serif mt-2 text-2xl font-semibold">Nhân viên thu ngân</h3><p class="mt-1 font-medium text-[#526d5b]">AEON</p></div>
+                <span class="rounded-full bg-[#f4f2eb] px-3 py-1.5 text-xs text-[#7c806e]">Dịch vụ khách hàng</span>
+              </div>
+              <p class="mt-4 max-w-3xl leading-7 text-[#68766f]">Thực hiện thanh toán, xuất hóa đơn và hỗ trợ khách hàng; đối soát tiền mặt vào cuối ca. Công việc giúp mình rèn luyện giao tiếp, sự chính xác và bình tĩnh xử lý tình huống.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="ky-nang" class="mx-auto max-w-6xl px-5 py-20 lg:px-8">
+        <div class="reveal grid gap-10 md:grid-cols-[.75fr_1.25fr]">
+          <div>
+            <p class="eyebrow">Bộ kỹ năng</p>
+            <h2 class="section-heading serif mt-3 text-4xl font-semibold sm:text-5xl">Sẵn sàng<br>đồng hành.</h2>
+            <p class="mt-5 max-w-sm leading-7 text-[#68766f]">Nền tảng kỹ năng thực tế cùng tinh thần học hỏi để thích nghi nhanh với công việc vận hành thương mại điện tử.</p>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <article class="soft-card rounded-2xl p-6">
+              <p class="eyebrow">Tin học</p><h3 class="serif mt-2 text-xl font-semibold">Công cụ văn phòng</h3>
+              <div class="mt-4 flex flex-wrap gap-2"><span class="pill">Microsoft Word</span><span class="pill">Excel cơ bản</span></div>
+            </article>
+            <article class="soft-card rounded-2xl p-6">
+              <p class="eyebrow">Thiết kế & nội dung</p><h3 class="serif mt-2 text-xl font-semibold">Kể chuyện bằng hình ảnh</h3>
+              <div class="mt-4 flex flex-wrap gap-2"><span class="pill">Canva</span><span class="pill">Thiết kế banner</span><span class="pill">Copywriting</span></div>
+            </article>
+            <article class="soft-card rounded-2xl p-6">
+              <p class="eyebrow">Ngoại ngữ</p><h3 class="serif mt-2 text-xl font-semibold">Tiếng Trung</h3>
+              <div class="mt-4 flex flex-wrap gap-2"><span class="pill">HSK 3</span></div>
+            </article>
+            <article class="soft-card rounded-2xl p-6">
+              <p class="eyebrow">Làm việc</p><h3 class="serif mt-2 text-xl font-semibold">Phối hợp hiệu quả</h3>
+              <div class="mt-4 flex flex-wrap gap-2"><span class="pill">Quản lý thời gian</span><span class="pill">Phối hợp nhóm</span></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="lien-he" class="mx-auto max-w-6xl px-5 py-20 lg:px-8">
+        <div class="soft-card reveal overflow-hidden rounded-[2rem]">
+          <div class="grid gap-10 p-7 sm:p-10 md:grid-cols-[1fr_auto] md:items-center md:p-14">
+            <div>
+              <p class="eyebrow">Kết nối với mình</p>
+              <h2 class="section-heading serif mt-3 max-w-2xl text-4xl font-semibold sm:text-5xl">Cùng tạo nên trải nghiệm mua sắm tốt hơn.</h2>
+              <p class="mt-4 max-w-xl leading-7 text-[#68766f]">Mình rất mong có cơ hội trao đổi về vị trí Thực tập sinh vận hành sàn Thương mại điện tử và được đóng góp cho đội ngũ của bạn.</p>
+            </div>
+            <button class="screen-only inline-flex items-center justify-center gap-2 rounded-full bg-[#526d5b] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#405a49]" onclick="window.print()">
+              Tải xuống CV bản PDF <span aria-hidden="true">↓</span>
+            </button>
+          </div>
+          <div class="grid gap-5 border-t border-[#e8ece6] bg-white/50 px-7 py-7 sm:grid-cols-3 sm:px-10 md:px-14">
+            <a href="mailto:anh824482@gmail.com" class="group">
+              <span class="eyebrow">Email</span><span class="mt-1 block break-all font-medium transition group-hover:text-[#526d5b]">anh824482@gmail.com</span>
+            </a>
+            <a href="tel:+84979800105" class="group">
+              <span class="eyebrow">Điện thoại</span><span class="mt-1 block font-medium transition group-hover:text-[#526d5b]">0979 800 105</span>
+            </a>
+            <div>
+              <span class="eyebrow">Địa chỉ</span><span class="mt-1 block font-medium">Tân Kỳ Tân Quý, P. Bình Hưng Hòa, TP.HCM</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 pb-8 pt-3 text-xs text-[#849087] lg:px-8">
+      <span>© 2026 Vũ Thị Ngọc Ánh</span>
+      <span>Được thiết kế với sự chỉn chu và một chút dịu dàng.</span>
+    </footer>
+  </div>
+
+  <button id="music-toggle" class="music-button fixed bottom-5 right-5 z-40 inline-flex items-center gap-3 rounded-full border border-white/70 bg-[#526d5b] px-4 py-3 text-left text-white transition hover:bg-[#405a49]" type="button" aria-label="Bật nhạc nền" aria-pressed="false">
+    <span id="music-icon" class="flex h-8 w-8 items-center justify-center rounded-full bg-white/15" aria-hidden="true">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.2c0-.5.55-.8.98-.53l6.03 3.8a.63.63 0 0 1 0 1.06l-6.03 3.8A.63.63 0 0 1 5 10.8V3.2Z"/></svg>
+    </span>
+    <span class="pr-1"><span id="music-status" class="block text-xs font-semibold">Bật nhạc nền</span><span class="mt-0.5 block text-[10px] text-white/70">Piano · Kevin MacLeod · CC BY 3.0</span></span>
+  </button>
+  <audio id="background-music" preload="none" loop>
+    <!-- Gymnopedie No. 1 by Kevin MacLeod, CC BY 3.0: https://creativecommons.org/licenses/by/3.0/ -->
+    <source src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Gymnopedie_No._1_%28ISRC_USUAN1100787%29.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    (() => {
+      const canvas = document.getElementById("bubble-canvas");
+      const context = canvas.getContext("2d");
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let bubbles = [];
+      let width = 0;
+      let height = 0;
+      let animationFrame = 0;
+
+      function resizeCanvas() {
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width * pixelRatio;
+        canvas.height = height * pixelRatio;
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
+        context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        const count = Math.min(24, Math.max(10, Math.floor(width / 65)));
+        bubbles = Array.from({ length: count }, () => ({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: 5 + Math.random() * 18,
+          speed: .12 + Math.random() * .28,
+          drift: (Math.random() - .5) * .18,
+          alpha: .09 + Math.random() * .12
+        }));
+        drawBubbles(false);
+      }
+
+      function drawBubbles(animate) {
+        context.clearRect(0, 0, width, height);
+        for (const bubble of bubbles) {
+          context.beginPath();
+          context.arc(bubble.x, bubble.y, bubble.radius, 0, Math.PI * 2);
+          context.fillStyle = `rgba(157, 181, 158, ${bubble.alpha})`;
+          context.fill();
+          context.strokeStyle = `rgba(126, 153, 130, ${bubble.alpha * .7})`;
+          context.lineWidth = 1;
+          context.stroke();
+          if (animate) {
+            bubble.y -= bubble.speed;
+            bubble.x += bubble.drift;
+            if (bubble.y + bubble.radius < 0) {
+              bubble.y = height + bubble.radius;
+              bubble.x = Math.random() * width;
+            }
+            if (bubble.x < -bubble.radius) bubble.x = width + bubble.radius;
+            if (bubble.x > width + bubble.radius) bubble.x = -bubble.radius;
+          }
+        }
+        if (animate) animationFrame = requestAnimationFrame(() => drawBubbles(true));
+      }
+
+      resizeCanvas();
+      if (!reducedMotion) animationFrame = requestAnimationFrame(() => drawBubbles(true));
+      window.addEventListener("resize", resizeCanvas, { passive: true });
+
+      const menuToggle = document.getElementById("menu-toggle");
+      const menu = document.getElementById("main-menu");
+      menuToggle.addEventListener("click", () => {
+        const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+        menuToggle.setAttribute("aria-expanded", String(!isOpen));
+        menuToggle.setAttribute("aria-label", isOpen ? "Mở menu" : "Đóng menu");
+        menu.classList.toggle("hidden", isOpen);
+        menu.classList.toggle("flex", !isOpen);
+      });
+      menu.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
+        menu.classList.add("hidden");
+        menu.classList.remove("flex");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Mở menu");
+      }));
+
+      const revealItems = document.querySelectorAll(".reveal");
+      if ("IntersectionObserver" in window && !reducedMotion) {
+        const observer = new IntersectionObserver((entries, currentObserver) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              currentObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: .12 });
+        revealItems.forEach((item) => observer.observe(item));
+      } else {
+        revealItems.forEach((item) => item.classList.add("is-visible"));
+      }
+
+      const audio = document.getElementById("background-music");
+      const musicToggle = document.getElementById("music-toggle");
+      const musicStatus = document.getElementById("music-status");
+      const musicIcon = document.getElementById("music-icon");
+      const playMarkup = '<svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.2c0-.5.55-.8.98-.53l6.03 3.8a.63.63 0 0 1 0 1.06l-6.03 3.8A.63.63 0 0 1 5 10.8V3.2Z"/></svg>';
+      const pauseMarkup = '<svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M4 3.5A1.5 1.5 0 0 1 7 3.5v9a1.5 1.5 0 0 1-3 0v-9Zm5 0a1.5 1.5 0 0 1 3 0v9a1.5 1.5 0 0 1-3 0v-9Z"/></svg>';
+      musicToggle.addEventListener("click", async () => {
+        if (audio.paused) {
+          try {
+            await audio.play();
+            musicStatus.textContent = "Tạm dừng nhạc";
+            musicToggle.setAttribute("aria-label", "Tạm dừng nhạc nền");
+            musicToggle.setAttribute("aria-pressed", "true");
+            musicIcon.innerHTML = pauseMarkup;
+          } catch (error) {
+            musicStatus.textContent = "Không tải được nhạc";
+            musicToggle.setAttribute("aria-label", "Không tải được nhạc nền");
+            console.error("Không thể phát nhạc nền:", error);
+          }
+        } else {
+          audio.pause();
+          musicStatus.textContent = "Bật nhạc nền";
+          musicToggle.setAttribute("aria-label", "Bật nhạc nền");
+          musicToggle.setAttribute("aria-pressed", "false");
+          musicIcon.innerHTML = playMarkup;
+        }
+      });
+      audio.addEventListener("error", () => {
+        musicStatus.textContent = "Không tải được nhạc";
+        musicToggle.setAttribute("aria-label", "Không tải được nhạc nền");
+        musicToggle.setAttribute("aria-pressed", "false");
+        musicIcon.innerHTML = playMarkup;
+      });
+
+      window.addEventListener("pagehide", () => cancelAnimationFrame(animationFrame), { once: true });
+    })();
+  </script>
+</body>
+</html>
